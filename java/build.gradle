@@ -1,0 +1,65 @@
+plugins {
+    id 'java'
+    id 'io.quarkus' version "${quarkusVersion}"
+}
+
+group = 'org.scheduleague'
+version = '0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+
+    implementation enforcedPlatform("io.quarkus:quarkus-bom:${quarkusVersion}")
+    implementation platform("ai.timefold.solver:timefold-solver-bom:${timefoldVersion}")
+    if (System.properties['enterprise'] == 'true') {
+        implementation platform("ai.timefold.solver.enterprise:timefold-solver-enterprise-bom:${timefoldVersion}")
+        implementation 'ai.timefold.solver.enterprise:timefold-solver-enterprise-quarkus'
+    }
+
+	annotationProcessor 'org.projectlombok:lombok:1.18.34'
+	compileOnly 'org.projectlombok:lombok:1.18.34'
+    implementation 'ai.timefold.solver:timefold-solver-quarkus'
+    implementation 'ai.timefold.solver:timefold-solver-quarkus-jackson'
+    implementation 'com.github.dpaukov:combinatoricslib3:3.4.0'
+    implementation 'io.quarkus:quarkus-rest'
+    implementation 'io.quarkus:quarkus-rest-jackson'
+    implementation 'io.quarkus:quarkus-smallrye-openapi'
+	implementation 'org.apache.commons:commons-lang3:3.17.0'
+
+    // Testing
+    testImplementation 'ai.timefold.solver:timefold-solver-test'
+    testImplementation 'io.quarkus:quarkus-junit5'
+    testImplementation 'io.quarkus:quarkus-junit5-mockito'
+    testImplementation 'io.rest-assured:rest-assured'
+    testImplementation 'org.assertj:assertj-core:3.26.3'
+    testImplementation 'org.awaitility:awaitility'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-parameters'
+}
+
+compileTestJava {
+    options.encoding = 'UTF-8'
+}
+
+test {
+    systemProperty 'java.util.logging.manager', 'org.jboss.logmanager.LogManager'
+
+    // Log the test execution results.
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+    }
+
+    useJUnitPlatform()
+}

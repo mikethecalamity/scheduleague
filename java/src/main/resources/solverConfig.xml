@@ -1,0 +1,18 @@
+<solver xmlns="https://timefold.ai/xsd/solver" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://timefold.ai/xsd/solver https://timefold.ai/xsd/solver/solver.xsd">
+    <randomSeed>1</randomSeed>
+    <constructionHeuristic>
+        <constructionHeuristicType>FIRST_FIT</constructionHeuristicType>
+    </constructionHeuristic>
+    <localSearch>
+        <swapMoveSelector>
+            <entitySelector>
+                <entityClass>org.scheduleague.domain.Match</entityClass>
+            </entitySelector>
+            <variableNameIncludes>
+                <variableNameInclude>homeTeam</variableNameInclude>
+                <variableNameInclude>awayTeam</variableNameInclude>
+            </variableNameIncludes>
+        </swapMoveSelector>
+    </localSearch>
+</solver>

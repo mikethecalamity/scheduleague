@@ -1,0 +1,71 @@
+{
+    "weeks": 5,
+    "startDate": "2024-09-09",
+    "dayTimeSlots": [
+        {
+            "day": "TUESDAY",
+            "startTimes": [
+                "18:30:00",
+                "20:00:00"
+            ]
+        },
+        {
+            "day": "THURSDAY",
+            "startTimes": [
+                "19:00:00",
+                "20:30:00"
+            ]
+        }
+    ],
+    "venues": [
+        {
+            "id": 1,
+            "name": "Venue1"
+        },
+        {
+            "id": 2,
+            "name": "Venue2"
+        }
+    ],
+    "teams": [
+        {
+            "id": 1,
+            "name": "Team1"
+        },
+        {
+            "id": 2,
+            "name": "Team2"
+        },
+        {
+            "id": 3,
+            "name": "Team3"
+        },
+        {
+            "id": 4,
+            "name": "Team4"
+        },
+        {
+            "id": 5,
+            "name": "Team5"
+        },
+        {
+            "id": 6,
+            "name": "Team6"
+        },
+        {
+            "id": 7,
+            "name": "Team7"
+        },
+        {
+            "id": 8,
+            "name": "Team8"
+        },
+        {
+            "id": 9,
+            "name": "Team9"
+        }
+    ],
+    "constraints": {
+        "maxMatchPerDay": 1
+    }
+}

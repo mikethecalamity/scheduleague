@@ -1,0 +1,32 @@
+{
+    "weeks": 3,
+    "startDate": "2024-09-09",
+    "dayTimeSlots": [
+        {
+            "day": "TUESDAY",
+            "startTimes": [
+                "20:00:00"
+            ]
+        }
+    ],
+    "venues": [
+        {
+            "id": 1,
+            "name": "Venue1"
+        }
+    ],
+    "teams": [
+        {
+            "id": 1,
+            "name": "Team1"
+        },
+        {
+            "id": 2,
+            "name": "Team2"
+        },
+        {
+            "id": 3,
+            "name": "Team3"
+        }
+    ]
+}
