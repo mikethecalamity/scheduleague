@@ -32,33 +32,33 @@ import jakarta.ws.rs.core.MediaType;
 @Tag(name = "League Scheduler", description = "League scheduler service assigning team matchups to venues and timeslots.")
 public class Resource {
 
-	@Inject
-	PlanningEntityBuilder planningEntityBuilder;
+    @Inject
+    PlanningEntityBuilder planningEntityBuilder;
 
-	@Inject
-	SolverManager<Schedule, UUID> solverManager;
+    @Inject
+    SolverManager<Schedule, UUID> solverManager;
 
-	@Inject
-	SolutionManager<Schedule, HardSoftBigDecimalScore> solutionManager;
+    @Inject
+    SolutionManager<Schedule, HardSoftBigDecimalScore> solutionManager;
 
-	@POST
-	@Path("generate")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Operation(summary = "Submit schedule inputs and constraints to generate a schedule.")
-	@RequestBody(description = "The schedule inputs", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = Inputs.class)))
-	@APIResponses({
-			@APIResponse(responseCode = "200", description = "The matches with assigned teams, venues, and timeslots.", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.ARRAY, implementation = Match.class)))
-	})
-	public List<Match> generate(Inputs inputs) throws InterruptedException, ExecutionException {
-		final List<Match> emptyMatches = planningEntityBuilder.buildMatches(inputs.weeks(), inputs.startDate(),
-				inputs.dayTimeSlots(), inputs.venues());
-		final List<Match> matches = planningEntityBuilder.addInitialState(inputs.venues(), inputs.teams(),
-				inputs.initialState(), emptyMatches);
-		final Schedule schedule = new Schedule(inputs.constraints(), inputs.teams(), matches);
+    @POST
+    @Path("generate")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Submit schedule inputs and constraints to generate a schedule.")
+    @RequestBody(description = "The schedule inputs", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = Inputs.class)))
+    @APIResponses({
+            @APIResponse(responseCode = "200", description = "The matches with assigned teams, venues, and timeslots.", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.ARRAY, implementation = Match.class)))
+    })
+    public List<Match> generate(Inputs inputs) throws InterruptedException, ExecutionException {
+        final List<Match> emptyMatches = planningEntityBuilder.buildMatches(inputs.weeks(), inputs.startDate(),
+                inputs.dayTimeSlots(), inputs.venues());
+        final List<Match> matches = planningEntityBuilder.addInitialState(inputs.venues(), inputs.teams(),
+                inputs.initialState(), emptyMatches);
+        final Schedule schedule = new Schedule(inputs.constraints(), inputs.teams(), matches);
 
-		final SolverJob<Schedule, UUID> job = solverManager.solve(UUID.randomUUID(), schedule);
+        final SolverJob<Schedule, UUID> job = solverManager.solve(UUID.randomUUID(), schedule);
 
-		return job.getFinalBestSolution().getMatches();
-	}
+        return job.getFinalBestSolution().getMatches();
+    }
 }

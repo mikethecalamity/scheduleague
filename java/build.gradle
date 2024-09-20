@@ -20,15 +20,15 @@ dependencies {
         implementation 'ai.timefold.solver.enterprise:timefold-solver-enterprise-quarkus'
     }
 
-	annotationProcessor 'org.projectlombok:lombok:1.18.34'
-	compileOnly 'org.projectlombok:lombok:1.18.34'
+    annotationProcessor 'org.projectlombok:lombok:1.18.34'
+    compileOnly 'org.projectlombok:lombok:1.18.34'
     implementation 'ai.timefold.solver:timefold-solver-quarkus'
     implementation 'ai.timefold.solver:timefold-solver-quarkus-jackson'
     implementation 'com.github.dpaukov:combinatoricslib3:3.4.0'
     implementation 'io.quarkus:quarkus-rest'
     implementation 'io.quarkus:quarkus-rest-jackson'
     implementation 'io.quarkus:quarkus-smallrye-openapi'
-	implementation 'org.apache.commons:commons-lang3:3.17.0'
+    implementation 'org.apache.commons:commons-lang3:3.17.0'
 
     // Testing
     testImplementation 'ai.timefold.solver:timefold-solver-test'
