@@ -1,0 +1,53 @@
+[
+    {
+        "id": 0,
+        "week": 1,
+        "datetime": "2024-09-10T20:00:00",
+        "venue": {
+            "id": 1,
+            "name": "Venue1"
+        },
+        "homeTeam": {
+            "id": 1,
+            "name": "Team1"
+        },
+        "awayTeam": {
+            "id": 1,
+            "name": "Team2"
+        }
+    },
+    {
+        "id": 1,
+        "week": 2,
+        "datetime": "2024-09-17T20:00:00",
+        "venue": {
+            "id": 1,
+            "name": "Venue1"
+        },
+        "homeTeam": {
+            "id": 3,
+            "name": "Team3"
+        },
+        "awayTeam": {
+            "id": 2,
+            "name": "Team1"
+        }
+    },
+    {
+        "id": 2,
+        "week": 3,
+        "datetime": "2024-09-24T20:00:00",
+        "venue": {
+            "id": 1,
+            "name": "Venue1"
+        },
+        "homeTeam": {
+            "id": 2,
+            "name": "Team2"
+        },
+        "awayTeam": {
+            "id": 1,
+            "name": "Team3"
+        }
+    }
+]
