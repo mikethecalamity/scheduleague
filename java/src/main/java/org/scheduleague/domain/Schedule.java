@@ -20,10 +20,13 @@ public class Schedule {
     
     @ProblemFactProperty
     private Constraints constraints;
+    
+    @ProblemFactCollectionProperty
+    private Collection<Team> teams;
 
     @ProblemFactCollectionProperty
     @ValueRangeProvider
-    private Collection<Team> teams;
+    private List<Matchup> matchups;
     
     @PlanningEntityCollectionProperty
     private List<Match> matches;
@@ -37,9 +40,10 @@ public class Schedule {
     public Schedule() {
     }
 
-    public Schedule(Constraints constraints, Collection<Team> teams, List<Match> matches) {
+    public Schedule(Constraints constraints, Collection<Team> teams, List<Matchup> matchups, List<Match> matches) {
         this.constraints = constraints;
-        this.teams = teams;
+        this.teams= teams;
+        this.matchups = matchups;
         this.matches = matches;
         this.constraintWeightOverrides = ConstraintWeightOverrides.of(//
                 Map.of(ScheduleConstraintProvider.TEAM_DAY_BALANCING_CONSTRAINT,
@@ -50,8 +54,8 @@ public class Schedule {
                         constraints.balanceOrder().getWeight(BalanceConstraint.VENUE)));
     }
 
-    public Collection<Team> getTeams() {
-        return teams;
+    public List<Matchup> getMatchups() {
+        return matchups;
     }
 
     public List<Match> getMatches() {

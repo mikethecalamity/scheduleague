@@ -13,9 +13,11 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.paukov.combinatorics3.Generator;
 import org.scheduleague.domain.Inputs.DayTimeSlots;
 import org.scheduleague.domain.Inputs.InputMatch;
 import org.scheduleague.domain.Match;
+import org.scheduleague.domain.Matchup;
 import org.scheduleague.domain.Team;
 import org.scheduleague.domain.Venue;
 
@@ -23,6 +25,21 @@ import jakarta.enterprise.context.Dependent;
 
 @Dependent
 public class PlanningEntityBuilder {
+	
+	public List<Matchup> buildMatchups(Collection<Team> teams) {
+		final List<List<Team>> matchupSets = Generator.combination(teams).simple(2).stream().toList();
+
+		final List<Matchup> matchups = new ArrayList<>();
+		for (int i = 0; i < matchupSets.size(); i++) {
+			final var matchupSet = matchupSets.get(i);
+			if (i % 2 == 0) {
+				matchups.add(new Matchup(matchupSet.get(0), matchupSet.get(1)));
+			} else {
+				matchups.add(new Matchup(matchupSet.get(1), matchupSet.get(0)));
+			}
+		}
+		return matchups;
+	}
 
     public List<Match> buildMatches(int weeks, LocalDate startDate, Collection<DayTimeSlots> dayTimeSlots,
             Collection<Venue> venues) {

@@ -35,27 +35,16 @@ public class ScheduleConstraintProvider implements ConstraintProvider {
     public Constraint[] defineConstraints(ConstraintFactory constraintFactory) {
         return new Constraint[] {
                 // Hard constraints
-                teamMatchConflict(constraintFactory),
                 teamDatetimeConflict(constraintFactory),
                 teamMaxMatchesPerDay(constraintFactory),
                 // Soft constraints
                 matchupRepeat(constraintFactory),
-                //teamOpponentBalancing(constraintFactory),
+                teamOpponentBalancing(constraintFactory),
                 //maxMatchupSeparation(constraintFactory),
-                //teamDayBalancing(constraintFactory),
-                //teamDayTimeBalancing(constraintFactory),
-                //teamVenueBalancing(constraintFactory)
+                teamDayBalancing(constraintFactory),
+                teamDayTimeBalancing(constraintFactory),
+                teamVenueBalancing(constraintFactory)
         };
-    }
-    
-    Constraint teamMatchConflict(ConstraintFactory constraintFactory) {
-        // A team cannot play itself
-        return constraintFactory
-                .forEach(Match.class)
-                .filter(m -> m.getHomeTeam().equals(m.getAwayTeam()))
-                // penalize with a hard weight
-                .penalizeBigDecimal(HardSoftBigDecimalScore.ONE_HARD)
-                .asConstraint(TEAM_MATCH_CONSTRAINT);
     }
     
     Constraint teamDatetimeConflict(ConstraintFactory constraintFactory) {
@@ -64,10 +53,7 @@ public class ScheduleConstraintProvider implements ConstraintProvider {
                 // Select each pair of 2 matches
                 .forEachUniquePair(Match.class,
                         Joiners.equal(Match::getDatetime),
-                        Joiners.filtering((m1, m2) -> m1.getHomeTeam().equals(m2.getHomeTeam())
-                                || m1.getHomeTeam().equals(m2.getAwayTeam())
-                                || m1.getAwayTeam().equals(m2.getHomeTeam())
-                                || m1.getAwayTeam().equals(m2.getAwayTeam())))
+                        Joiners.filtering(Match::anyTeamsEqual))
                 // penalize with a hard weight
                 .penalizeBigDecimal(HardSoftBigDecimalScore.ONE_HARD)
                 .asConstraint(TEAM_DATETIME_CONSTRAINT);

@@ -97,8 +97,8 @@ public class PlanningEntityBuilderTest {
             assertThat(m.getId()).isEqualTo(emptyMatch2.getId());
             assertThat(m.getWeek()).isEqualTo(emptyMatch2.getWeek());
             assertThat(m.getVenue()).isSameAs(venue);
-            assertThat(m.getHomeTeam()).isSameAs(team2);
-            assertThat(m.getAwayTeam()).isSameAs(team1);
+            assertThat(m.getMatchup().homeTeam()).isSameAs(team2);
+            assertThat(m.getMatchup().awayTeam()).isSameAs(team1);
         });
     }
     

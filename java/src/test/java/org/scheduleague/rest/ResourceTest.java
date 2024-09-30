@@ -68,7 +68,7 @@ public class ResourceTest {
             assertThat(match.getId()).isEqualTo(i);
             assertThat(match.getWeek()).isEqualTo(i + 1);
             assertThat(match.getDatetime()).isEqualTo(first.plusWeeks(i));
-            assertThat(match.getVenue()).isSameAs(venues.get(0));
+            assertThat(match.getVenue()).isEqualTo(venues.get(0));
         }
 
         // Check that all combinations of teams exist

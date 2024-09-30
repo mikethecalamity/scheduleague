@@ -28,16 +28,6 @@ public class ScheduleConstraintProviderTest {
     ConstraintVerifier<ScheduleConstraintProvider, Schedule> constraintVerifier;
 
     @Test
-    void teamConflictTest() {
-        final Match match2 = new Match(0, 1, LocalDateTime.of(2024, 9, 9, 9, 0), VENUE1, TEAM2, TEAM3);
-
-        // Check that the team cannot play at the same time (as home team)
-        final Match conflictingMatch = new Match(1, 1, LocalDateTime.of(2024, 9, 9, 7, 0), VENUE2, TEAM1, TEAM1);
-        constraintVerifier.verifyThat(ScheduleConstraintProvider::teamMatchConflict).given(conflictingMatch, match2)
-                .penalizesBy(BigDecimal.ONE);
-    }
-
-    @Test
     void teamDatetimeConflictTest() {
         // Build two initial matches
         final Match match1 = new Match(0, 1, LocalDateTime.of(2024, 9, 9, 7, 0), VENUE1, TEAM1, TEAM2);

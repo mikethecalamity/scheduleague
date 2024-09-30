@@ -1,9 +1,12 @@
 package org.scheduleague.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Stream;
 
+import org.apache.commons.collections4.ListUtils;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
@@ -14,6 +17,7 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.scheduleague.domain.Inputs;
 import org.scheduleague.domain.Match;
+import org.scheduleague.domain.Matchup;
 import org.scheduleague.domain.Schedule;
 import org.scheduleague.solver.PlanningEntityBuilder;
 
@@ -51,14 +55,31 @@ public class Resource {
             @APIResponse(responseCode = "200", description = "The matches with assigned teams, venues, and timeslots.", content = @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(type = SchemaType.ARRAY, implementation = Match.class)))
     })
     public List<Match> generate(Inputs inputs) throws InterruptedException, ExecutionException {
+    	final List<Matchup> matchups1 = planningEntityBuilder.buildMatchups(inputs.teams());
+    	final List<Matchup> matchups2 = matchups1.stream().map(Matchup::reverse).toList();
         final List<Match> emptyMatches = planningEntityBuilder.buildMatches(inputs.weeks(), inputs.startDate(),
                 inputs.dayTimeSlots(), inputs.venues());
-        final List<Match> matches = planningEntityBuilder.addInitialState(inputs.venues(), inputs.teams(),
+        final List<Match> unscheduledMatches = planningEntityBuilder.addInitialState(inputs.venues(), inputs.teams(),
                 inputs.initialState(), emptyMatches);
-        final Schedule schedule = new Schedule(inputs.constraints(), inputs.teams(), matches);
 
-        final SolverJob<Schedule, UUID> job = solverManager.solve(UUID.randomUUID(), schedule);
-
-        return job.getFinalBestSolution().getMatches();
+        final List<List<Match>> partitions = ListUtils.partition(unscheduledMatches, matchups1.size());    
+        
+        List<Match> scheduledMatches = new ArrayList<>();
+        for (int i = 0; i < partitions.size(); i++) {
+        	final List<Match> partition = partitions.get(i);
+        	if (partition.stream().allMatch(Match::isLocked)) {
+        		scheduledMatches = partition;
+        		continue;
+        	}
+        	
+        	final List<Match> matches = Stream.concat(scheduledMatches.stream(), partition.stream()).toList();
+        	final List<Matchup> matchups = i % 2 == 0 ? matchups1 : matchups2;
+	        final Schedule schedule = new Schedule(inputs.constraints(), inputs.teams(), matchups, matches);
+	
+	        final SolverJob<Schedule, UUID> job = solverManager.solve(UUID.randomUUID(), schedule);
+	
+	        scheduledMatches = job.getFinalBestSolution().getMatches().stream().map(Match::lock).toList();;
+        }
+        return scheduledMatches;
     }
 }

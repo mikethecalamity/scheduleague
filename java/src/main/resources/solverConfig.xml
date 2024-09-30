@@ -10,8 +10,7 @@
                 <entityClass>org.scheduleague.domain.Match</entityClass>
             </entitySelector>
             <variableNameIncludes>
-                <variableNameInclude>homeTeam</variableNameInclude>
-                <variableNameInclude>awayTeam</variableNameInclude>
+                <variableNameInclude>matchup</variableNameInclude>
             </variableNameIncludes>
         </swapMoveSelector>
     </localSearch>
